@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 8ed8905f714ab49d49c68ebad50d8f9d
+timeCreated: 1537897813
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Yeah Papa
+  fontNames:
+  - Yeah Papa
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
