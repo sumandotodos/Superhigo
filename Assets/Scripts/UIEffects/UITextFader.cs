@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class UITextFader : FGProgram {
+public class UITextFader : FGProgram, UITwoPointEffect {
 
 	public float prevValue;
 	public float value;
@@ -24,6 +24,7 @@ public class UITextFader : FGProgram {
 					// 1: fading
 
 	private void updateColor() {
+        if (textComponent == null) return;
 		Color newColor = opaqueColor;
 		newColor.a = opacity.getValue ();
 		textComponent.color = newColor;
@@ -71,13 +72,18 @@ public class UITextFader : FGProgram {
 	public void fadeToOpaqueImmediately() {
 		state = 0;
 		textComponent.enabled = (maxOpacity > 0.0f);
-		opacity.setValue (maxOpacity);
+		opacity.setValueImmediate (maxOpacity);
+		updateColor ();
 	}
 
 	public void fadeToTransparentImmediately() {
 		state = 0;
-		textComponent.enabled = (minOpacity == 0.0f);
-		opacity.setValue (minOpacity);
+        if (textComponent != null)
+        {
+            textComponent.enabled = (minOpacity == 0.0f);
+        }
+		opacity.setValueImmediate (minOpacity);
+		updateColor ();
 	}
 
 	public void fadeToOpaqueTask(FGProgram waiter) {
@@ -117,6 +123,10 @@ public class UITextFader : FGProgram {
 			waiters [i].waitFinish ();
 		}
 		waiters = new List<FGProgram>();
+	}
+
+	public float getNormalizedParameter() {
+		return (opacity.getValue () - minOpacity) / (maxOpacity - minOpacity);
 	}
 		
 }

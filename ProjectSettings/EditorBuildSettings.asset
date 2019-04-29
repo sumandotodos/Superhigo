@@ -11,3 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Title.unity
     guid: e6f4948313c8e46828f46c045266d4fc
+  - enabled: 1
+    path: Assets/Scenes/FlavorSelect.unity
+    guid: 658c3251fcd6a45dc8fb2da6225e5892
+  - enabled: 1
+    path: Assets/Scenes/MainGame.unity
+    guid: 258f7c9e1f189450ba84ff9b047a9b02

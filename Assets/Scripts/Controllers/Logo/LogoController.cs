@@ -26,6 +26,8 @@ public class LogoController : FGProgram {
 	// Use this for initialization
 	void Start () {
 
+		Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
 		execute (new FGPMethodCall (this, "setFeathersHidden", true));
 		execute (new FGPMethodCall (globalFader, "fadeToTransparent"));
 		delay (0.75f);
@@ -41,7 +43,7 @@ public class LogoController : FGProgram {
 	}
 
 	public void nextScene() {
-		SceneManager.LoadScene ("LogoMadrid");
+		SceneManager.LoadScene ("Title");
 	}
 
 	public void checkTouch() {

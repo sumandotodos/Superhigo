@@ -147,6 +147,8 @@ public class FGProgram : MonoBehaviour {
 	}
 	private void notifyend_execute() {
 		notifyFinish ();
+		_state = FINISHED;
+		currentSubprogramName = "_main";
 		release = true;
 	}
 	private void if_execute() {
@@ -992,6 +994,7 @@ public class FGProgram : MonoBehaviour {
 	public void run() {
 		PC = 0;
 		_state = NEXTINSTRUCTION;
+		currentSubprogramName = "_main";
 	}
 
 	public void cancelDelay() {

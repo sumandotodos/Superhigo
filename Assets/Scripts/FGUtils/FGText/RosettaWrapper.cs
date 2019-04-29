@@ -6,6 +6,8 @@ public class RosettaWrapper : MonoBehaviour {
 
 	public Rosetta rosetta;
 
+	public void Start() {
 
+	}
 
 }

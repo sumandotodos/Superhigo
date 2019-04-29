@@ -11,6 +11,11 @@ public class FGTable : MonoBehaviour {
 	public const int TypeInteger = 0;
 	public const int TypeString = 1;
 
+	public int checkLargestValue;
+	public string checkLongestString;
+
+	public FGTable linkedTable_N;
+
 	TableUsage tableUsage;
 
 	public RosettaWrapper rosettaWrapper;
@@ -63,6 +68,8 @@ public class FGTable : MonoBehaviour {
 			res = tableUsage.selectRow ();
 
 		}
+		if (linkedTable_N != null)
+			linkedTable_N.expendRow (res);
 		return res;
 
 	}
@@ -175,6 +182,38 @@ public class FGTable : MonoBehaviour {
 		return res;
 	}
 
+	public int getLargestAbsoluteInteger() {
+		int maxValue = 0;
+		for (int i = 0; i < column.Count; ++i) {
+			if (column [i].getType() == FGTable.TypeInteger) {
+				for(int j = 0; j < column[i].nItems(); ++j) {
+					int val = (int)this.getElement (i, j);
+					if (Mathf.Abs(val) > Mathf.Abs(maxValue)) {
+						maxValue = val;
+					}
+				}
+			}
+		}
+		return maxValue;
+	}
+
+	public string getLongestText() {
+		int maxLenght = 0;
+		string longestString = "";
+		for (int i = 0; i < column.Count; ++i) {
+			if (column [i].getType() == FGTable.TypeString) {
+				for(int j = 0; j < column[i].nItems(); ++j) {
+					string s = (string)this.getElement (i, j);
+					if (s.Length > maxLenght) {
+						maxLenght = s.Length;
+						longestString = s;
+					}
+				}
+			}
+		}
+		return longestString;
+	}
+
 	public string exportJSON() {
 
 		bool hasColumnNames = false;
@@ -255,6 +294,19 @@ public class FGTable : MonoBehaviour {
 		res.TrimEnd ('\n');
 		return res;
 
+	}
+
+
+	public void addIntColumnFromList(List<int> values, string name) {
+		GameObject newCol = new GameObject ();
+		newCol.transform.SetParent (this.transform);
+		newCol.name = "Column" + column.Count;
+		newCol.AddComponent<FGIntColumn> ();
+		newCol.GetComponent<FGIntColumn> ().columnName = name;
+		foreach(int v in values) {
+			newCol.GetComponent<FGIntColumn> ().addData (v);
+		}
+		column.Add (newCol.GetComponent<FGColumn> ());
 	}
 
 

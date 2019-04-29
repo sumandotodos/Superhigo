@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 78afea4e3d80f43a4a016633141e8905
+timeCreated: 1538558800
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Wasabi-Gum
+  fontNames:
+  - Wasabi-Gum
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

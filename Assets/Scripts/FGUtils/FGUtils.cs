@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public enum EaseType { linear, tanh, cubicOut, boingOut, boingOutMore };
+public enum EaseType { linear, tanh, cubicOut, boingOut, boingOutMore, sigmoid, cubicIn };
 
 public class TweenTransforms {
 
@@ -48,6 +48,24 @@ public class TweenTransforms {
 			return current;
 		float t = (current - origin) / (dest - origin);
 		r = (t * t * t + -3 * t * t + 3*t);
+		return origin + r * (dest - origin);
+	}
+
+	public static float cubicIn(float origin, float current, float dest) {
+		float r = 0.0f;
+		if (dest == origin)
+			return current;
+		float t = 1.0f - ((current - origin) / (dest - origin));
+		r = 1.0f - (t * t * t + -3 * t * t + 3*t);
+		return origin + r * (dest - origin);
+	}
+
+	public static float sigmoid(float origin, float current, float dest) {
+		float r = 0.0f;
+		if (dest == origin)
+			return current;
+		float t = ((current - origin) / (dest - origin)) * 14.0f - 7.0f;
+		r = 1.0f / (1.0f + Mathf.Exp (-t));
 		return origin + r * (dest - origin);
 	}
 
@@ -368,11 +386,17 @@ public class SoftFloat:SoftVariable {
 		case EaseType.cubicOut:
 			setTransformation (TweenTransforms.cubicOut);
 			break;
+		case EaseType.cubicIn:
+			setTransformation (TweenTransforms.cubicIn);
+			break;
 		case EaseType.linear:
 			setTransformation (TweenTransforms.linear);
 			break;
 		case EaseType.tanh:
 			setTransformation (TweenTransforms.tanh);
+			break;
+		case EaseType.sigmoid:
+			setTransformation (TweenTransforms.sigmoid);
 			break;
 		}
 	}
@@ -532,6 +556,26 @@ public class FGUtils : MonoBehaviour {
 		}
 
 
+	}
+
+	public static object getFirstNonNullElementWithTest(System.Func<object, bool> test, params object[] o) {
+		int nObjects = o.Length;
+		object result = null;
+		for (int i = 0; i < nObjects; ++i) {
+			if (test(o [i])) {
+				result = o [i];
+				break;
+			}
+		}
+		if (result == null)
+			throw new System.Exception ("At least one element must be non-null");
+		return result;
+	}
+
+	public static object selectObjectAtRandom(params object[] o) {
+		int nObjects = o.Length;
+		int selected = Random.Range (0, nObjects);
+		return o [selected];
 	}
 
 	// WARNING: not exhaustive
@@ -737,6 +781,87 @@ public class FGUtils : MonoBehaviour {
 
 	public static float RangeRemap(float inValue, float rangeInMin, float rangeInMax, float rangeOutMin, float rangeOutMax) {
 		return (rangeOutMin  +  (inValue - rangeInMin) / (rangeInMax - rangeInMin) * (rangeOutMax - rangeOutMin));
+	}
+
+	public static T randomElementFromList<T>(List<T> theList) {
+		if (theList.Count < 1)
+			throw new System.Exception ("Empty list");
+
+		int r = Random.Range (0, theList.Count);
+		return theList [r];
+
+	}
+
+	public static T randomElementFromArray<T>(T[] theArray) {
+		if (theArray.Length < 1)
+			throw new System.Exception ("Empty array");
+
+		int r = Random.Range (0, theArray.Length);
+		return theArray [r];
+
+	}
+
+
+	public static string chopLines(string input, int maxLineLength) {
+		int dummy;
+		return chopLines (input, maxLineLength, out dummy);
+	}
+
+	public static string chopLines(string input, int maxLineLength, out int nLines) {
+
+		int numberOfLines = 1;
+
+		int maxLine;
+		char[] data;
+		List<int> indexes = new List<int>();
+		data = input.ToCharArray ();
+		maxLine = input.Length;
+
+		const int MAXLINES = 10;
+
+		/* get list of all spaces */
+		for (int i = 0; i < input.Length; ++i) {
+			if (data [i] == ' ')
+				indexes.Add (i);
+		}
+
+		int offset = maxLineLength;
+		int indexOfLastSpace = input.LastIndexOf (' ');
+		int Length = input.Length;
+		if (indexOfLastSpace != -1) {
+			Length -= (input.Length - indexOfLastSpace);
+			while (offset < input.Length) {
+
+
+				/* find closest space */
+				int closest = -1;
+				int minDistance;
+				minDistance = input.Length * input.Length; // soft of absolute value
+				for (int i = 0; i < indexes.Count; ++i) {
+					if ((indexes [i] - offset) * (indexes [i] - offset) < minDistance) {
+						minDistance = (indexes [i] - offset) * (indexes [i] - offset);
+						closest = i;
+					}
+				}
+
+				if (closest != -1) {
+					data [indexes [closest]] = '\n';
+					++numberOfLines;
+				}
+				if (offset != indexes [closest])
+					offset = indexes [closest];
+				offset += maxLineLength;
+
+				if (numberOfLines > MAXLINES)
+					break;
+
+			}
+
+		}
+
+		nLines = numberOfLines;
+		return new string (data);
+
 	}
 
 }

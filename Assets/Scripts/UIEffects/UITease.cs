@@ -12,6 +12,7 @@ public class UITease : MonoBehaviour {
 	public float k = 1.6f;
 	public float b = 0.5f;
 	float remainingTime;
+	public Vector2 squash = Vector2.one;
 
 	float burstTimeRemaining;
 	public float burstTime = 0.5f;
@@ -57,7 +58,7 @@ public class UITease : MonoBehaviour {
 		SX += SXSpeed * deltatime;
 		SY += SYSpeed * deltatime;
 
-		Vector3 sc = new Vector3 (SX, SY, 1);
+		Vector3 sc = new Vector3 (1.0f*(1.0f-squash.x) + SX*squash.x, 1.0f*(1.0f-squash.y) + SY*squash.y, 1);
 		this.transform.localScale = sc;
 
 		if (burstTimeRemaining > 0.0f) {

@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class UIFader : FGProgram {
+public class UIFader : FGProgram, UITwoPointEffect {
 
 	public static UIFader singleton;
 
@@ -34,6 +34,11 @@ public class UIFader : FGProgram {
 	public static void singletonFadeToOpaque() {
 		if (singleton)
 			singleton.fadeToOpaque ();
+	}
+
+	public void setSpeed(float s) {
+		speed = s;
+		opacity.setSpeed (speed);
 	}
 
 	public static void singletonFadeToTransparent() {
@@ -120,12 +125,14 @@ public class UIFader : FGProgram {
 		state = 0;
 		imageComponent.enabled = (maxOpacity > 0.0f);
 		opacity.setValueImmediate (maxOpacity);
+		updateColor ();
 	}
 
-	public void fadeToTranspareImmediately() {
+	public void fadeToTransparentImmediately() {
 		state = 0;
 		imageComponent.enabled = (minOpacity == 0.0f);
 		opacity.setValueImmediate (minOpacity);
+		updateColor ();
 	}
 
 	public void notifyFinishExternal() {
@@ -133,6 +140,10 @@ public class UIFader : FGProgram {
 			waiters [i].waitFinish ();
 		}
 		waiters = new List<FGProgram>();
+	}
+
+	public float getNormalizedParameter() {
+		return (opacity.getValue () - minOpacity) / (maxOpacity - minOpacity);
 	}
 		
 }

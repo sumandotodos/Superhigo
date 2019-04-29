@@ -15,6 +15,8 @@ public class UIGeneralFader : FGProgram {
 		started = true;
 		imageFaders = this.GetComponentsInChildren<UIFader> ();
 		textFaders = this.GetComponentsInChildren<UITextFader> ();
+        foreach (UIFader f in imageFaders) f.Start();
+        foreach (UITextFader f in textFaders) f.Start();
 	}
 	
 
@@ -47,7 +49,7 @@ public class UIGeneralFader : FGProgram {
 		Start ();
 		foreach (UIFader f in imageFaders) {
 			f.Start ();
-			f.fadeToTranspareImmediately ();
+			f.fadeToTransparentImmediately ();
 		}
 		foreach (UITextFader f in textFaders) {
 			f.Start ();

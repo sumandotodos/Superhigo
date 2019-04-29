@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 //
 
-public class UIScaleFader : FGProgram {
+public class UIScaleFader : FGProgram, UITwoPointEffect {
 
 	public float prevValue;
 	public float value;
@@ -97,15 +97,15 @@ public class UIScaleFader : FGProgram {
 		scale.setValueImmediate (maxScale);
 	}
 
-//	public void scaleInTask(FGProgram waiter) {
-//		registerWaiter (waiter);
-//		scaleIn ();
-//	}
-//
-//	public void scaleOutTask(FGProgram waiter) {
-//		registerWaiter (waiter);
-//		scaleOut ();
-//	}
+	public void scaleInTask(FGProgram waiter) {
+		registerWaiter (waiter);
+		scaleIn ();
+	}
+
+	public void scaleOutTask(FGProgram waiter) {
+		registerWaiter (waiter);
+		scaleOut ();
+	}
 
 	void Update() {
 
@@ -137,5 +137,9 @@ public class UIScaleFader : FGProgram {
 //		}
 //		waiters = new List<FGProgram>();
 //	}
+
+	public float getNormalizedParameter() {
+		return (scale.getValue () - minScale) / (maxScale - minScale);
+	}
 		
 }

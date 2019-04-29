@@ -6,6 +6,9 @@ public class UIOpacityWiggle : MonoBehaviour {
 
 	float opacity;
 
+	public Color baseColor = Color.white;
+
+	public float minOpacity = 0.25f;
 	public float maxOpacity = 0.75f;
 
 	public float angSpeed = 6.0f;
@@ -22,7 +25,7 @@ public class UIOpacityWiggle : MonoBehaviour {
 		isActive = false;
 		angle = 0.0f;
 		img = this.GetComponent<RawImage> ();
-		img.color = new Color (1, 1, 1, 0);
+		img.color = new Color (baseColor.r, baseColor.g, baseColor.b, 0);
 		isActive = true;
 	}
 
@@ -38,8 +41,8 @@ public class UIOpacityWiggle : MonoBehaviour {
 			return;
 
 		angle += angSpeed * Time.deltaTime;
-		opacity = (maxOpacity / 2.0f) + (maxOpacity / 2.0f) * Mathf.Sin (angle);
-		img.color = new Color (1, 1, 1, opacity);
+		opacity = FGUtils.RangeRemap (Mathf.Sin (angle), -1.0f, 1.0f, minOpacity, maxOpacity);
+		img.color = new Color (baseColor.r, baseColor.g, baseColor.b, opacity);
 
 	}
 

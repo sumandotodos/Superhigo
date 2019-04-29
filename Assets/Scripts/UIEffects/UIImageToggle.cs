@@ -9,6 +9,11 @@ public class UIImageToggle : MonoBehaviour {
 
 	RawImage rawImage;
 
+	public MonoBehaviour EventReceiver_N;
+	public string executeOnToggleOn;
+	public string executeOnToggleOff;
+
+	public AudioClip sound_N;
 	public bool mustTurnOffOthers = true;
 	public bool mustDisableOthers = true;
 
@@ -52,13 +57,19 @@ public class UIImageToggle : MonoBehaviour {
 		if (!enabled)
 			return;
 
+		SoundController.playSound (sound_N);
+
 		if (toggleMode == ToggleMode.toggle) {
 			if (rawImage.texture == onImg) {
 				rawImage.texture = offImg;
-			} else
+				execute (false);
+			} else {
 				rawImage.texture = onImg;
+				execute (true);
+			}
 		} else {
 			rawImage.texture = onImg;
+			execute (true);
 		}
 
 		if (rawImage.texture == onImg) {
@@ -94,5 +105,12 @@ public class UIImageToggle : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void execute(bool on) {
+		Debug.Log ("Execute " + on);
+		if (EventReceiver_N != null) {
+			EventReceiver_N.Invoke (on? executeOnToggleOn : executeOnToggleOff, 0.0f);
+		}
 	}
 }
